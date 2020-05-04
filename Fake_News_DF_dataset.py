@@ -3,6 +3,9 @@ from sklearn.model_selection import train_test_split, KFold
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import PassiveAggressiveClassifier, LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+import matplotlib.pyplot as plt
+import math
+import numpy as np
 
 df = pandas.read_csv("news.csv")
 
@@ -47,7 +50,7 @@ for train_index, test_index in cv.split(df["text"]):
     # print(logit_cf)
     # print(classification_report(y_test, logit_y_pred))
 
-    # Method 2: Passive Aggressive Classifier
+    # Method 2: Passive Aggressive Classifier []
     pac.fit(tfidf_train, y_train)
     pac_scores.append(accuracy_score(y_test, pac.predict(tfidf_test))*100)
 
@@ -62,10 +65,27 @@ for train_index, test_index in cv.split(df["text"]):
     # print(pac_cf)
     # print(classification_report(y_test, pac_y_pred))
 
+label_y = []
+
+for i in range(1,len(logit_scores)+1):
+    # y axis labels
+    label_y.append("iter%d" % i)
+
+def scores_barplot(scores):
+    high = max(scores)
+    low = min(scores)
+    plt.ylim([math.floor(low-0.5*(high-low)), math.ceil(high+0.5*(high-low))])
+    plt.bar(range(1,len(scores)+1), scores)
+    plt.xticks(range(1,len(scores)+1), label_y)
+    plt.axhline(np.mean(scores), color="green", label="Mean")
+    plt.show()
+
+# Visualize Output
 print("Logit accuracy scores: ", logit_scores)
-print("Average %: ", sum(logit_scores)/len(logit_scores))
+logit_barplot = scores_barplot(logit_scores)
+print("Mean Accuracy %: ", sum(logit_scores)/len(logit_scores))
+
 print("PAC accuracy scores: ", pac_scores)
-print("Average %: ", sum(pac_scores)/len(pac_scores))
-
-
+pac_barplot = scores_barplot(pac_scores)
+print("Mean Accuracy %: ", sum(pac_scores)/len(pac_scores))
 
