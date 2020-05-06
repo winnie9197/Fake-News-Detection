@@ -21,6 +21,6 @@ Column 1 | Column 2 | Column 3 | Column 4
 
 ## Improvements
 Some potential next steps include:
-i) improve data quality for learning 
-ii) test additional models for performance
-iii) introduce additional attributes/factor columns 
+i. improve data quality for learning 
+ii. test additional models for performance
+iii. introduce additional attributes/factor columns 
